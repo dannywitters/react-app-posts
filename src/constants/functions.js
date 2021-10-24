@@ -2,14 +2,14 @@ export function getMDHMForTimestamp(timestamp) {
   try {
     let date = new Date(timestamp * 1000);
     let month = ['Jan' , 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
+    let hours = date.getUTCHours();
+    let minutes = date.getUTCMinutes();
     let ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
     hours = hours ? hours : 12;
     minutes = minutes < 10 ? ('0' + minutes) : minutes;
 
-    return month[date.getMonth()] + " " +  date.getDate() + " " + hours + ':' + minutes + ampm + ' UTC';
+    return month[date.getUTCMonth()] + " " +  date.getUTCDate() + " " + hours + ':' + minutes + ampm + ' UTC';
   } catch(e) {
     return '-';
   }

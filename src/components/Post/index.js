@@ -19,7 +19,7 @@ import { updateUpvote } from 'cache/update';
 import Love from 'assets/svgs/love';
 
 //STYLES
-import { Wrap, Vote, Body, BodyTop, User, BodyMedium, BodyBottom } from './styles';
+import { Wrap, Vote, Body, BodyTop, UserLink, PostLink, BodyMedium, BodyBottom } from './styles';
 
 const contract = new Contract(CONTRACTS[process.env.REACT_APP_ENV].MOKATOKEN, new utils.Interface(MokaTokenABI))
 
@@ -54,15 +54,14 @@ function Post(props) {
     <Wrap>
       <Body>
         <BodyTop>
-          <User 
+          <UserLink 
             href={MOKA_LINKS[process.env.REACT_APP_ENV].user + props.item.user.id}
             target="_blank"
-            title={props.item.user.id}
           >
             {props.item.user.id.substring(0, 8)}...
-          </User>
+          </UserLink>
           <div style={{ margin: '0 5px' }}>·</div>
-          <div style={{ fontSize: '0.9em' }} title={getMDHMForTimestamp(props.item.timestamp)}>{getDisplayForTimestamp(props.item.timestamp)}</div>
+          <PostLink>{getMDHMForTimestamp(props.item.timestamp)}</PostLink>
         </BodyTop>
         <BodyMedium>
           {

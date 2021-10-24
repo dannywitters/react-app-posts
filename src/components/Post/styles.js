@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Wrap = styled.div`
   border-bottom: 1px solid #f7f7f7;
-  cursor: pointer;
   padding: 15px 10px 15px 20px;
   flex-shrink: 0;
   display: flex;
@@ -21,7 +20,7 @@ export const BodyTop = styled.div`
   align-items: center;
 `;
 
-export const User = styled.a`
+export const UserLink = styled.a`
   background: #f3f3f3;
   padding: 2px 8px;
   border-radius: 5px;
@@ -32,6 +31,10 @@ export const User = styled.a`
   &:hover {
     background: #e9e9e9;
   }
+`;
+
+export const PostLink = styled.div`
+  font-size: 0.9em;
 `;
 
 export const BodyMedium = styled.div`
@@ -51,6 +54,7 @@ export const Vote = styled.div`
   width: 65px;
   margin-left: auto;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 export const Reward = styled.div`
