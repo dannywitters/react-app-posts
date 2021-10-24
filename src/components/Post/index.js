@@ -42,6 +42,8 @@ function Post(props) {
         propsCallback('insufficient_funds');
       } else if (state.errorMessage === 'execution reverted: Cannot Upvote Own Post') {
         propsCallback('cant_upvote_own_post');
+      } else if (state.errorMessage === 'unknown account #0') {
+        propsCallback('not_connected');
       } else {
         propsCallback('error');
       }

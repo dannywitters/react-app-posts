@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 0.95em;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
   }
 
   select {
@@ -52,9 +52,9 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    height: 100%;
     width: 100%;
     display: flex;
+    flex: 1;
   }
 
   .post-link {

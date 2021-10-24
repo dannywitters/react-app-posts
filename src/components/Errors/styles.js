@@ -10,7 +10,7 @@ export const Wrap = styled.div`
 export const Bubble = styled.div`
   height: 20px;
   border-radius: 5px;
-  padding: 2px 10px;
+  padding: 4px 10px;
   color: #fff;
   background: #da2d2b;
   margin: 5px 3px;

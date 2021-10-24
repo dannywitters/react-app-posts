@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { gql, useQuery } from "@apollo/client";
 import { LINKS, MOKA_LINKS, MAINNETINFURA } from 'constants/constants';
-import { GET_MOKA_POST } from 'gql/queries';
+import { GET_USER_UPVOTES_IDS, GET_MOKA_POST } from 'gql/queries';
 import { getENS } from 'ens-lookup';
-import { GET_USER_UPVOTES_IDS } from 'gql/queries';
 
 //WEB3
 import { useEthers } from '@usedapp/core';
@@ -12,28 +11,32 @@ import { ethers } from 'ethers';
 //COMPONENTS
 import Post from 'components/Post';
 import Love from 'assets/svgs/love';
-
 import Notifications from 'components/Notifications';
 import Errors from 'components/Errors';
 
+//MODALS
+import WrongNetworkModal from 'components/Modals/WrongNetworkModal';
+
 //STYLES
-import { Wrap, Profile, ProfilePic, Address, Body, LikedByRow, LikerLink, FooterLink } from './styles';
+import { Wrap, NetworkBar, NetworkBarInternal, Profile, ProfilePic, Address, Body, LikedByRow, LikerLink, FooterLink } from './styles';
 
 const NFT_API = 'https://use.nifti.es/api/:id';
 const IPFS_API = 'https://ipfs.io/ipfs/:id';
 
 function Posts(props) {
   const id = props.match.params.id;
-  const [userUpvotes, setUserUpvotes] = useState([]);
-  const [wrongNetwork, setWrongNetwork] = useState(false);
-  const [txError, setTxError] = useState(null);
-  const { account, error } = useEthers();
-  const { data: voteData, refetch } = useQuery(gql(GET_USER_UPVOTES_IDS), { variables: { id: account && account.toString().toLowerCase() }, skip: !account });
 
+  const [userUpvotes, setUserUpvotes] = useState([]);
+  const [modal, setModal] = useState(null);
+  const [wrongNetwork, setWrongNetwork] = useState(false);
   const [ensLoaded, setEnsLoaded] = useState(false);
   const [ensData, setEnsData] = useState(null);
   const [profileURL, setProfileURL] = useState(null);
+  const [txError, setTxError] = useState(null);
 
+  const { activateBrowserWallet, account, error } = useEthers();
+
+  const { data: voteData, refetch } = useQuery(gql(GET_USER_UPVOTES_IDS), { variables: { id: account && account.toString().toLowerCase() }, skip: !account });
   const { data } = useQuery(gql(GET_MOKA_POST), { variables: { id } });
 
   useEffect(() => {
@@ -126,8 +129,29 @@ function Posts(props) {
               </React.Fragment>
             }
           </Profile>
+          {
+            wrongNetwork === true &&
+            <NetworkBar onClick={() => setModal('WRONG-NETWORK')}><NetworkBarInternal error={true}>Wrong Network</NetworkBarInternal></NetworkBar>
+          }
+          {
+            wrongNetwork === false && 
+            <React.Fragment>
+              {
+                !account &&
+                <NetworkBar onClick={() => activateBrowserWallet()}><NetworkBarInternal>⛓️&nbsp;Connect Wallet</NetworkBarInternal></NetworkBar>
+              }
+              {
+                account &&
+                <NetworkBar>
+                  <NetworkBarInternal>
+                    <a href={MOKA_LINKS[process.env.REACT_APP_ENV].user + account} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>⛓️&nbsp;{account.substring(0, 8)}...</a>
+                  </NetworkBarInternal>
+                </NetworkBar>
+              }
+            </React.Fragment>
+          }
           <Body>
-            <Post account={account} userUpvotes={userUpvotes} item={data.post} txErrorCallback={onTxErrorCallback} />
+            <Post account={account} userUpvotes={userUpvotes} txErrorCallback={onTxErrorCallback} item={data.post} />
           </Body>
           {
             data.post.upvotedUsers && data.post.upvotedUsers.length > 0 &&
@@ -143,8 +167,8 @@ function Posts(props) {
             </div>
           }
           {
-            (txError || wrongNetwork) &&
-            <Errors error={wrongNetwork ? 'wrong_network' : txError} />
+            txError && !wrongNetwork &&
+            <Errors error={txError} />
           }
           {
             !txError && !wrongNetwork &&
@@ -165,6 +189,10 @@ function Posts(props) {
             }
           </div>
         </React.Fragment>
+      }
+      {
+        modal === 'WRONG-NETWORK' &&
+        <WrongNetworkModal closeModal={() => setModal(null)} />
       }
     </Wrap>
   );

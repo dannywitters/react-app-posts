@@ -8,6 +8,27 @@ export const Wrap = styled.div`
   width: 100%;
 `;
 
+export const NetworkBar = styled.div`
+  position: fixed;
+  top: 5px;
+  right: 8px;
+  display: flex;
+`;
+
+export const NetworkBarInternal = styled.div`
+  height: 20px;
+  border-radius: 5px;
+  padding: 4px 10px;
+  color: ${props => props.error ? '#fff' : null};
+  background: ${props => props.error ? '#da2d2b' : '#ffd700'};
+  margin: 5px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
 export const Profile = styled.div`
   margin: 50px 0px;
 `;
@@ -21,9 +42,10 @@ export const ProfilePic = styled.img`
 `;
 
 export const Address = styled.div`
-  background: #f1d96e;
   padding: 5px 10px;
-  border-radius: 5px;
+  font-weight: 700;
+  background: #fdf9ea;
+  border-radius: 3px;
 `;
 
 export const Body = styled.div`
